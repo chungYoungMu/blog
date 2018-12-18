@@ -32,7 +32,8 @@
     </div>
 
     <div class="form-group">
-      <input type="password" name="password" id="password" class="form-control input-lg" placeholder="密码" required value="123">
+      <input type="password" name="password" id="password" class="form-control input-lg" placeholder="密码" required
+        value="123">
     </div>
 
     <div class="form-group">
@@ -47,22 +48,25 @@
   <script src="/node_modules/jquery/dist/jquery.min.js"></script>
   <script>
     $(function () {
-      $('#form').on('submit', function (e) {
-        // 组织表单的默认提交行为
-        e.preventDefault()
+      $('#form').on('submit', function () {
         $.ajax({
-          url: '/login',
+          url: '/login', // 请求本域的  /register  URL
+          type: 'post',
           data: $('#form').serialize(),
-          type: 'POST',
-          dataType: 'json',
           success: function (result) {
-            if (result.status !== 200) {
-              // 登录失败
-              return alert(result.msg)
+            // console.log(location)
+            alert(result.msg)
+            if (location.pathname === '/login/reauth') {
+              return window.close()
             }
             location.href = '/'
+          },
+          error: function (err) {
+            // console.log('这是错误信息:',err)
+            alert(err.responseJSON.msg)
           }
         })
+        return false
       })
     })
   </script>
